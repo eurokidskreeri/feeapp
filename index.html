@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EuroKids Kreeri - Fee Receipt Generator</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="data:application/json,{&quot;name&quot;:&quot;EuroKids Fee Receipt Generator&quot;,&quot;short_name&quot;:&quot;EuroKids Receipts&quot;,&quot;display&quot;:&quot;standalone&quot;,&quot;start_url&quot;:&quot;/&quot;,&quot;theme_color&quot;:&quot;%231E40AF&quot;,&quot;background_color&quot;:&quot;%23FCD34D&quot;,&quot;icons&quot;:[{&quot;src&quot;:&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%231E40AF'/%3E%3Ctext x='50' y='60' font-family='Arial' font-size='40' fill='%23FCD34D' text-anchor='middle'%3EEK%3C/text%3E%3C/svg%3E&quot;,&quot;sizes&quot;:&quot;192x192&quot;,&quot;type&quot;:&quot;image/svg+xml&quot;}]}">
+    <meta name="theme-color" content="#1E40AF">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="EuroKids Receipts">
+    
+    <!-- PDF Generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <div class="header-left">
+                    <div class="eurokids-logo">
+                        <div class="logo-icon">🐰</div>
+                        <div class="logo-text">
+                            <h1 class="app-title">EuroKids Kreeri</h1>
+                            <span class="tagline">Fee Receipt Generator</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <div class="school-info-header">
+                        <span class="location">Kreeri, Baramulla, J&K</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="section active">
+                <div class="container">
+                    <h2 class="section-title">Dashboard</h2>
+                    
+                    <!-- Stats Cards -->
+                    <div class="stats-grid">
+                        <div class="stat-card stat-card--primary">
+                            <div class="stat-icon">📊</div>
+                            <div class="stat-info">
+                                <h3 class="stat-number" id="totalReceipts">0</h3>
+                                <p class="stat-label">Total Receipts</p>
+                            </div>
+                        </div>
+                        <div class="stat-card stat-card--yellow">
+                            <div class="stat-icon">👶</div>
+                            <div class="stat-info">
+                                <h3 class="stat-number" id="totalStudents">0</h3>
+                                <p class="stat-label">Little Learners</p>
+                            </div>
+                        </div>
+                        <div class="stat-card stat-card--success">
+                            <div class="stat-icon">💰</div>
+                            <div class="stat-info">
+                                <h3 class="stat-number" id="totalAmount">₹0</h3>
+                                <p class="stat-label">Total Collected</p>
+                            </div>
+                        </div>
+                        <div class="stat-card stat-card--info">
+                            <div class="stat-icon">📈</div>
+                            <div class="stat-info">
+                                <h3 class="stat-number" id="todayReceipts">0</h3>
+                                <p class="stat-label">Today's Receipts</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="quick-actions">
+                        <h3>Quick Actions</h3>
+                        <div class="action-buttons">
+                            <button class="btn btn--primary" onclick="showSection('generate')">
+                                📝 Generate Receipt
+                            </button>
+                            <button class="btn btn--secondary" onclick="showSection('students')">
+                                👶 Manage Students
+                            </button>
+                            <button class="btn btn--outline" onclick="showSection('history')">
+                                📋 View History
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Recent Receipts -->
+                    <div class="recent-receipts">
+                        <h3>Recent Receipts</h3>
+                        <div id="recentReceiptsList" class="receipt-list">
+                            <!-- Recent receipts will be populated here -->
+                        </div>
+                    </div>
+
+                    <!-- Integration Status -->
+                    <div class="integration-status">
+                        <div class="status status--success">
+                            📊 Ready for Google Sheets Integration
+                        </div>
+                        <p class="status-text">Connect eurokidskreeri@gmail.com to sync data automatically</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Generate Receipt Section -->
+            <section id="generate" class="section">
+                <div class="container">
+                    <div class="section-header">
+                        <h2 class="section-title">Generate New Receipt</h2>
+                        <button class="btn btn--outline" onclick="showSection('dashboard')">
+                            ← Back to Dashboard
+                        </button>
+                    </div>
+
+                    <form id="receiptForm" class="receipt-form">
+                        <div class="form-grid">
+                            <!-- Student Information -->
+                            <div class="form-section">
+                                <h3>👶 Student Information</h3>
+                                <div class="form-group">
+                                    <label class="form-label" for="studentSelect">Select Student</label>
+                                    <select id="studentSelect" class="form-control" onchange="fillStudentDetails()">
+                                        <option value="">Select existing student or enter new details</option>
+                                    </select>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label class="form-label" for="studentName">Student Name *</label>
+                                        <input type="text" id="studentName" class="form-control" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" for="studentClass">Class *</label>
+                                        <select id="studentClass" class="form-control" required>
+                                            <option value="">Select Class</option>
+                                            <option value="Play Group">Play Group</option>
+                                            <option value="Nursery">Nursery</option>
+                                            <option value="LKG">LKG</option>
+                                            <option value="UKG">UKG</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label class="form-label" for="rollNumber">Roll Number *</label>
+                                        <input type="text" id="rollNumber" class="form-control" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" for="fatherName">Father's Name</label>
+                                        <input type="text" id="fatherName" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="phone">Contact Number</label>
+                                    <input type="tel" id="phone" class="form-control" placeholder="9797xxxxxx">
+                                </div>
+                            </div>
+
+                            <!-- Receipt Details -->
+                            <div class="form-section">
+                                <h3>🧾 Receipt Details</h3>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label class="form-label" for="receiptNumber">Receipt Number</label>
+                                        <input type="text" id="receiptNumber" class="form-control" readonly>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" for="receiptDate">Date</label>
+                                        <input type="date" id="receiptDate" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label class="form-label" for="academicSession">Academic Session</label>
+                                        <select id="academicSession" class="form-control">
+                                            <option value="2025-26">2025-26</option>
+                                            <option value="2024-25">2024-25</option>
+                                            <option value="2023-24">2023-24</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" for="paymentMethod">Payment Method</label>
+                                        <select id="paymentMethod" class="form-control">
+                                            <option value="Cash">Cash</option>
+                                            <option value="UPI">UPI</option>
+                                            <option value="Net Banking">Net Banking</option>
+                                            <option value="Card Payment">Card Payment</option>
+                                            <option value="Cheque">Cheque</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Fee Details -->
+                        <div class="fee-section">
+                            <h3>💰 Fee Details</h3>
+                            <div class="fee-table-container">
+                                <table class="fee-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Fee Type</th>
+                                            <th>Amount (₹)</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="feeTableBody">
+                                        <!-- Fee rows will be added dynamically -->
+                                    </tbody>
+                                </table>
+                                <button type="button" class="btn btn--outline btn--sm" onclick="addFeeRow()">
+                                    + Add Fee Item
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Calculation Summary -->
+                        <div class="calculation-summary">
+                            <div class="summary-row">
+                                <span>Subtotal:</span>
+                                <span id="subtotal">₹0</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>Discount:</span>
+                                <input type="number" id="discount" class="discount-input" value="0" min="0" onchange="calculateTotal()">
+                            </div>
+                            <div class="summary-row total-row">
+                                <span>Total Amount:</span>
+                                <span id="totalAmount">₹0</span>
+                            </div>
+                        </div>
+
+                        <!-- Form Actions -->
+                        <div class="form-actions">
+                            <button type="button" class="btn btn--secondary" onclick="previewReceipt()">
+                                👁️ Preview Receipt
+                            </button>
+                            <button type="submit" class="btn btn--primary">
+                                💾 Generate Receipt
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Students Section -->
+            <section id="students" class="section">
+                <div class="container">
+                    <div class="section-header">
+                        <h2 class="section-title">Student Management</h2>
+                        <div class="header-actions">
+                            <button class="btn btn--primary" onclick="showAddStudentModal()">
+                                + Add Student
+                            </button>
+                            <button class="btn btn--outline" onclick="showSection('dashboard')">
+                                ← Back to Dashboard
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="students-list" id="studentsList">
+                        <!-- Students will be populated here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- History Section -->
+            <section id="history" class="section">
+                <div class="container">
+                    <div class="section-header">
+                        <h2 class="section-title">Receipt History</h2>
+                        <button class="btn btn--outline" onclick="showSection('dashboard')">
+                            ← Back to Dashboard
+                        </button>
+                    </div>
+
+                    <div class="history-filters">
+                        <div class="filter-row">
+                            <input type="text" id="searchFilter" class="form-control" placeholder="Search by student name or receipt number...">
+                            <select id="classFilter" class="form-control">
+                                <option value="">All Classes</option>
+                            </select>
+                            <select id="paymentMethodFilter" class="form-control">
+                                <option value="">All Payment Methods</option>
+                                <option value="Cash">Cash</option>
+                                <option value="UPI">UPI</option>
+                                <option value="Net Banking">Net Banking</option>
+                                <option value="Card Payment">Card Payment</option>
+                                <option value="Cheque">Cheque</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="receipts-grid" id="receiptsGrid">
+                        <!-- Receipt history will be populated here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Reports Section -->
+            <section id="reports" class="section">
+                <div class="container">
+                    <div class="section-header">
+                        <h2 class="section-title">Reports & Analytics</h2>
+                        <button class="btn btn--outline" onclick="showSection('dashboard')">
+                            ← Back to Dashboard
+                        </button>
+                    </div>
+
+                    <div class="reports-grid">
+                        <div class="report-card">
+                            <h3>Monthly Collection</h3>
+                            <div class="report-chart" style="position: relative; height: 300px;">
+                                <canvas id="monthlyChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="report-card">
+                            <h3>Class-wise Distribution</h3>
+                            <div class="report-chart" style="position: relative; height: 300px;">
+                                <canvas id="classChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="report-card">
+                            <h3>Payment Methods</h3>
+                            <div class="report-chart" style="position: relative; height: 300px;">
+                                <canvas id="paymentMethodChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="export-section">
+                        <h3>Export Data</h3>
+                        <div class="export-buttons">
+                            <button class="btn btn--primary" onclick="exportToCSV()">
+                                📊 Export to CSV
+                            </button>
+                            <button class="btn btn--secondary" onclick="exportToGoogleSheets()">
+                                📈 Export to Google Sheets
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings Section -->
+            <section id="settings" class="section">
+                <div class="container">
+                    <div class="section-header">
+                        <h2 class="section-title">Settings</h2>
+                        <button class="btn btn--outline" onclick="showSection('dashboard')">
+                            ← Back to Dashboard
+                        </button>
+                    </div>
+
+                    <div class="settings-form">
+                        <div class="form-section">
+                            <h3>🏫 School Information</h3>
+                            <form id="schoolSettingsForm">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label class="form-label" for="schoolName">School Name</label>
+                                        <input type="text" id="schoolName" class="form-control" value="EuroKids Kreeri">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" for="schoolPhone">Phone</label>
+                                        <input type="tel" id="schoolPhone" class="form-control" value="+91-9797813480">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="schoolAddress">Address</label>
+                                    <textarea id="schoolAddress" class="form-control" rows="3">Kreeri, Baramulla, Jammu & Kashmir - 193502</textarea>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label class="form-label" for="schoolEmail">Email</label>
+                                        <input type="email" id="schoolEmail" class="form-control" value="eurokidskreeri@gmail.com">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" for="principalName">Principal Name</label>
+                                        <input type="text" id="principalName" class="form-control" value="Ms. Shahana Kouser">
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn--primary">💾 Save Settings</button>
+                            </form>
+                        </div>
+
+                        <div class="form-section">
+                            <h3>🔧 App Settings</h3>
+                            <div class="setting-item">
+                                <label class="form-label">Offline Mode</label>
+                                <p class="setting-description">All data is stored locally for offline access</p>
+                                <div class="status status--success">✅ Active</div>
+                            </div>
+                            <div class="setting-item">
+                                <label class="form-label">Google Sheets Sync</label>
+                                <p class="setting-description">Connect to automatically backup data</p>
+                                <button class="btn btn--outline" onclick="connectGoogleSheets()">
+                                    🔗 Connect Google Sheets
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <button class="nav-item active" onclick="showSection('dashboard')" data-section="dashboard">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-label">Dashboard</span>
+            </button>
+            <button class="nav-item" onclick="showSection('generate')" data-section="generate">
+                <span class="nav-icon">📝</span>
+                <span class="nav-label">Generate</span>
+            </button>
+            <button class="nav-item" onclick="showSection('students')" data-section="students">
+                <span class="nav-icon">👶</span>
+                <span class="nav-label">Students</span>
+            </button>
+            <button class="nav-item" onclick="showSection('history')" data-section="history">
+                <span class="nav-icon">📋</span>
+                <span class="nav-label">History</span>
+            </button>
+            <button class="nav-item" onclick="showSection('reports')" data-section="reports">
+                <span class="nav-icon">📊</span>
+                <span class="nav-label">Reports</span>
+            </button>
+        </nav>
+
+        <!-- Modals -->
+        <!-- Add Student Modal -->
+        <div id="addStudentModal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Add New Student</h3>
+                    <button class="modal-close" onclick="hideAddStudentModal()">×</button>
+                </div>
+                <form id="addStudentForm">
+                    <div class="form-group">
+                        <label class="form-label" for="newStudentName">Student Name *</label>
+                        <input type="text" id="newStudentName" class="form-control" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="newStudentClass">Class *</label>
+                            <select id="newStudentClass" class="form-control" required>
+                                <option value="">Select Class</option>
+                                <option value="Play Group">Play Group</option>
+                                <option value="Nursery">Nursery</option>
+                                <option value="LKG">LKG</option>
+                                <option value="UKG">UKG</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="newStudentRoll">Roll Number *</label>
+                            <input type="text" id="newStudentRoll" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="newFatherName">Father's Name</label>
+                            <input type="text" id="newFatherName" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="newStudentPhone">Contact Number</label>
+                            <input type="tel" id="newStudentPhone" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn--secondary" onclick="hideAddStudentModal()">Cancel</button>
+                        <button type="submit" class="btn btn--primary">Add Student</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Preview Modal -->
+        <div id="previewModal" class="modal hidden">
+            <div class="modal-content modal-lg">
+                <div class="modal-header">
+                    <h3>Receipt Preview</h3>
+                    <button class="modal-close" onclick="hidePreviewModal()">×</button>
+                </div>
+                <div class="modal-body">
+                    <div id="receiptPreview" class="receipt-preview">
+                        <!-- Receipt preview will be generated here -->
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button class="btn btn--secondary" onclick="hidePreviewModal()">Close</button>
+                    <button class="btn btn--primary" onclick="generatePDF()">📄 Generate PDF</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
