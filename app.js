@@ -93,6 +93,43 @@ const sampleReceipts = [
     }
 ];
 
+// Google Sheets Web App endpoint (Apps Script /exec URL)
+const EXEC_URL =  "https://script.google.com/macros/s/AKfycby97CCgR1mwcS8lanLsC2TN4DFi8duLqQWuSiQrsdWYHVDtGXavNwltjx6GtmOVifI/exec";
+
+
+async function syncReceiptToSheets(receipt) {
+    // Prepare payload matching Code.gs fields A..L
+    const payload = {
+        receiptNo: receipt.id,
+        date: receipt.date,
+        studentName: receipt.studentName,
+        className: receipt.class,
+        rollNo: receipt.rollNo,
+        fatherName: receipt.fatherName || "",
+        phone: receipt.phone || "",
+        feeType: (receipt.feeItems || []).map(i => i.type).join(", "),
+        amount: Number(receipt.total || receipt.amount || 0),
+        paymentMethod: receipt.paymentMethod,
+        balance: Number(receipt.balance || 0),
+        total: Number(receipt.total || receipt.amount || 0)
+    };
+
+    // Use text/plain so the browser sends a "simple request" (no OPTIONS preflight)
+    const res = await fetch(EXEC_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=UTF-8" },
+        body: JSON.stringify(payload)
+    });
+
+    // Expect JSON: { ok:true } from Code.gs
+    const json = await res.json().catch(() => ({}));
+    if (!json.ok) {
+        console.warn("Sheets sync failed:", json.error || res.statusText);
+    } else {
+        console.log("Sheets sync ok");
+    }
+}
+
 // Navigation Functions
 function showSection(sectionId) {
     console.log('Navigating to section:', sectionId);
@@ -816,34 +853,40 @@ function generateReceiptHTML(data) {
             <div>Thank you for choosing EuroKids!</div>
             <div>For queries: eurokidskreeri@gmail.com | +91-9797813480</div>
         </div>
-    `;
-}
+
+
+
+
 
 function handleReceiptSubmission(e) {
     e.preventDefault();
-    
+
     const receiptData = collectReceiptData();
     if (!receiptData) return;
-    
-    // Save receipt
+
+    // Save receipt locally
     appState.receipts.push(receiptData);
     appState.currentReceiptNumber++;
     saveData();
-    
-    // Update displays
+
+    // Update UI
     updateDashboard();
     populateReceiptsHistory();
-    
-    // Show success message and reset form
+
+    // Fire-and-forget sync to Google Sheets
+    // (does not block the UI; check console for "Sheets sync ok")
+    syncReceiptToSheets(receiptData).catch(err => console.warn("Sync error:", err));
+
+    // User feedback and reset form
     alert('Receipt generated successfully! 🎉');
     document.getElementById('receiptForm').reset();
     document.getElementById('feeTableBody').innerHTML = '';
     addFeeRow();
     generateReceiptNumber();
-    
+
     const today = new Date().toISOString().split('T')[0];
     document.getElementById('receiptDate').value = today;
-    
+
     // Auto-generate PDF
     generatePDF();
 }
