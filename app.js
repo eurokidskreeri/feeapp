@@ -853,7 +853,8 @@ function generateReceiptHTML(data) {
             <div>Thank you for choosing EuroKids!</div>
             <div>For queries: eurokidskreeri@gmail.com | +91-9797813480</div>
         </div>
-
+   ';
+}
 
 
 
