@@ -858,40 +858,46 @@ function generateReceiptHTML(data) {
 
 
 
+let submitting = false;
 
-function handleReceiptSubmission(e) {
-    e.preventDefault();
+async function handleReceiptSubmission(e) {
+  e.preventDefault();                 // stop native submit [web:432]
+  if (submitting) return;
+  submitting = true;
 
+  try {
+    // 1) Validate BEFORE saving/syncing
     const receiptData = collectReceiptData();
-    if (!receiptData) return;
+    if (!receiptData) return;         // collectReceiptData already alerts [web:406]
 
-    // Save receipt locally
+    // 2) Sync to Google Sheets (simple request avoids preflight)
+    await syncReceiptToSheets(receiptData).catch(err => console.warn('Sync error:', err));
+
+    // 3) Save locally and update UI
     appState.receipts.push(receiptData);
     appState.currentReceiptNumber++;
     saveData();
-
-    // Update UI
     updateDashboard();
     populateReceiptsHistory();
 
-    // Fire-and-forget sync to Google Sheets
-    // (does not block the UI; check console for "Sheets sync ok")
-    syncReceiptToSheets(receiptData).catch(err => console.warn("Sync error:", err));
-
-    // User feedback and reset form
+    // 4) Now confirm success and reset the form
     alert('Receipt generated successfully! 🎉');
-    document.getElementById('receiptForm').reset();
-    document.getElementById('feeTableBody').innerHTML = '';
+    const form = document.getElementById('receiptForm');
+    if (form) form.reset();
+    const body = document.getElementById('feeTableBody');
+    if (body) body.innerHTML = '';
     addFeeRow();
     generateReceiptNumber();
-
     const today = new Date().toISOString().split('T')[0];
-    document.getElementById('receiptDate').value = today;
+    const dateEl = document.getElementById('receiptDate');
+    if (dateEl) dateEl.value = today;
 
-    // Auto-generate PDF
+    // 5) Generate PDF after successful validation
     generatePDF();
+  } finally {
+    submitting = false;
+  }
 }
-
 function handleAddStudent(e) {
     e.preventDefault();
     
