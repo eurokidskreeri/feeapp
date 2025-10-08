@@ -71,7 +71,7 @@ const sampleStudents = [
   { id: 28, name: "Mohammad Usman Ganai",       class: "Play Group",  rollNo: "EK/3589/0033/2526", fatherName: "Imtayaz Ahmad Ganai",     phone: "8825026592" },
   { id: 29, name: "Niamat Jan",                 class: "Play Group",  rollNo: "EK/3589/0030/2526", fatherName: "Farooq Ahmad Lone",       phone: "9797002764" },
   { id: 30, name: "Noorain Miran",              class: "Play Group",  rollNo: "EK/3589/0025/2526", fatherName: "Ummar Ali Khan",          phone: "7006221540" },
-  { id: 31, name: "Taimur Aijaz Ali",           class: "Play Group",  rollNo: "EK/3589/0032/2526", fatherName: "Aijaz Ahmad
+  { id: 31, name: "Taimur Aijaz Ali",           class: "Play Group",  rollNo: "EK/3589/0032/2526", fatherName: "Aijaz Ahmad", phone :"9898989870"}
 ];
 
 const sampleReceipts = [
