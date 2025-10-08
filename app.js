@@ -441,6 +441,12 @@ function generatePDF() {
     doc.save(`EuroKids_Receipt_${receiptData.id}_${receiptData.studentName.replace(/\s+/g, '_')}.pdf`);
     
     hidePreviewModal();
+
+   // E) Reset form & defaults
+    const form = document.getElementById('receiptForm');
+    if (form) form.reset();
+    const body = document.getElementById('feeTableBody');
+    if (body) body.innerHTML = '';
 }
 
 function regenerateReceipt(receiptId) {
@@ -899,11 +905,7 @@ async function handleReceiptSubmission(e) {
     // D) Success UI
     alert(syncOk ? 'Receipt generated and synced! 🎉' : 'Receipt generated locally! Sync pending.'); 
 
-    // E) Reset form & defaults
-    const form = document.getElementById('receiptForm');
-    if (form) form.reset();
-    const body = document.getElementById('feeTableBody');
-    if (body) body.innerHTML = '';
+   
     addFeeRow();
     generateReceiptNumber();
     const today = new Date().toISOString().split('T')[0];
