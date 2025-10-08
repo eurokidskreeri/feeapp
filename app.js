@@ -757,7 +757,7 @@ function collectReceiptData() {
     });
     
     if (!hasValidFees) {
-        alert('Please add at least one fee item');
+        alert('Please add at 6 least one fee item');
         return null;
     }
     
