@@ -94,7 +94,7 @@ const sampleReceipts = [
 ];
 
 // Google Sheets Web App endpoint (Apps Script /exec URL)
-const EXEC_URL =  "https://script.google.com/macros/s/AKfycby97CCgR1mwcS8lanLsC2TN4DFi8duLqQWuSiQrsdWYHVDtGXavNwltjx6GtmOVifI/exec";
+const EXEC_URL =  "https://script.google.com/macros/s/AKfycbxKm4POgX_diaiPsoPNZXTkqMRssSV00ejuJtwJJTa9L6IRugHaiLWSSIB8jMPpUiN1/exec";
 
 
 async function syncReceiptToSheets(receipt) {
@@ -730,10 +730,10 @@ function collectReceiptData() {
     const studentClass = document.getElementById('studentClass').value;
     const rollNumber = document.getElementById('rollNumber').value;
     
-    if (!studentName || !studentClass || !rollNumber) {
-        alert('Please fill in all required student information');
-        return null;
-    }
+    // if (!studentName || !studentClass || !rollNumber) {
+    //     alert('Please fill in all required student information');
+    //     return null;
+    // }
     
     const feeRows = document.querySelectorAll('#feeTableBody tr');
     const feeItems = [];
