@@ -11,25 +11,19 @@ let appState = {
     feeTypes: [
         {name: "Monthly Fee - Nursery", defaultAmount: 1900},
         {name: "Monthly Fee - Play Group", defaultAmount: 1600},
-        {name: "Admission Fee", defaultAmount: 500},
+        {name: "Monthly Fee - Euro Junior", defaultAmount: 2100},
+        {name: "Monthly Fee - Euro Senior", defaultAmount: 2200},
+        {name: "Yearly Dues", defaultAmount: 10000},
         {name: "Transport Fee", defaultAmount: 800},
-        {name: "Books & Stationery", defaultAmount: 600},
-        {name: "Uniform", defaultAmount: 400},
-        {name: "Activities Fee", defaultAmount: 300},
-        {name: "Meals", defaultAmount: 1200},
-        {name: "Security Deposit", defaultAmount: 1000},
-        {name: "Development Fee", defaultAmount: 500},
-        {name: "Computer Lab Fee", defaultAmount: 200}
-    ],
+        {name: "Uniform", defaultAmount: 2000},
+     ],
     schoolInfo: {
         name: "EuroKids Kreeri",
-        address: "Kreeri, Baramulla, Jammu & Kashmir - 193502",
-        phone: "+91-9797813480",
+        address: "Kreeri, Baramulla, Jammu & Kashmir - 193198",
+        phone: "+91-8899008808",
         email: "eurokidskreeri@gmail.com",
         website: "www.eurokids.in",
-        principalName: "Ms. Shahana Kouser",
         affiliation: "EuroKids International",
-        regNumber: "EK-KRI-2024"
     },
     currentReceiptNumber: 1,
     currentYear: new Date().getFullYear()
@@ -315,7 +309,7 @@ function generatePDF() {
 
   // Place logo at top-left (15mm from left, 12mm from top, 26mm wide, 26mm tall)
   doc.addImage(EUROKIDS_LOGO, "JPEG", 12, 12, 46, 46);
-  doc.addImage(EUROKIDS_st, "JPEG", 140, 180, 46, 46);
+  doc.addImage(EUROKIDS_st, "JPEG", 140, 170, 46, 46);
 
     // Set font
     doc.setFont('helvetica');
@@ -396,7 +390,6 @@ function generatePDF() {
     // Signatures
     yPos += 20;
     doc.setFont(undefined, 'normal');
-    doc.text('Parent Signature', 20, yPos);
     doc.text('Authorized Signature', 140, yPos);
     
     yPos += 15;
