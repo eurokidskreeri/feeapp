@@ -93,7 +93,7 @@ const sampleStudents = [
 ];
 
  
-
+const receiptNumber;
 // Google Sheets Web App endpoint (Apps Script /exec URL)
 const EXEC_URL =  "https://script.google.com/macros/s/AKfycbxKm4POgX_diaiPsoPNZXTkqMRssSV00ejuJtwJJTa9L6IRugHaiLWSSIB8jMPpUiN1/exec";
 
@@ -632,7 +632,7 @@ function saveData() {
 }
 
 function generateReceiptNumber() {
-    const receiptNumber = `EK-KRI-${appState.currentYear}-${appState.currentReceiptNumber.toString().padStart(3, '0')}`;
+    receiptNumber = `EK-KRI-${appState.currentYear}-${appState.currentReceiptNumber.toString().padStart(3, '0')}`;
     const receiptNumberEl = document.getElementById('receiptNumber');
     if (receiptNumberEl) {
         receiptNumberEl.value = receiptNumber;
@@ -785,7 +785,7 @@ function collectReceiptData() {
  // inside collectReceiptData(), after building feeItems, subtotal, etc.
 const monthsCovered = getSelectedMonths();
 const receipt = {
-  id: receiptNumberEl.value,
+  id: receiptNumber,
   studentName, class: studentClass, rollNo: rollNumber,
   fatherName, phone,
   date: receiptDateEl.value,
