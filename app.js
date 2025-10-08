@@ -1,4 +1,10 @@
 // EuroKids Application State
+function setLoading(on) {
+  const btn = document.getElementById('generateBtn');         // id on your submit button
+  const overlay = document.getElementById('loadingOverlay');
+  if (btn) btn.disabled = !!on;                                // prevent clicks [web:455]
+  if (overlay) overlay.style.display = on ? 'flex' : 'none';   // show/hide overlay [web:450]
+}
 let appState = {
     students: [],
     receipts: [],
@@ -860,28 +866,39 @@ function generateReceiptHTML(data) {
 
 let submitting = false;
 
+
 async function handleReceiptSubmission(e) {
-  e.preventDefault();                 // stop native submit [web:432]
+  e.preventDefault();                                     // stop native submit [web:433]
   if (submitting) return;
   submitting = true;
+  setLoading(true);
 
   try {
-    // 1) Validate BEFORE saving/syncing
-    const receiptData = collectReceiptData();
-    if (!receiptData) return;         // collectReceiptData already alerts [web:406]
+    // A) Validate immediately
+    const receiptData = collectReceiptData();             // requires name, class, roll [web:406]
+    if (!receiptData) return;                             // collectReceiptData already alerts
 
-    // 2) Sync to Google Sheets (simple request avoids preflight)
-    await syncReceiptToSheets(receiptData).catch(err => console.warn('Sync error:', err));
+    // B) Sync to Google Sheets (non‑blocking on failure; optional strict check)
+    let syncOk = false;
+    try {
+      const resp = await syncReceiptToSheets(receiptData);
+      syncOk = !!(resp && resp.ok === true);
+      if (!syncOk) console.warn('Sheets sync not ok:', resp);
+    } catch (err) {
+      console.warn('Sheets sync error:', err);
+    }
 
-    // 3) Save locally and update UI
+    // C) Save locally and refresh UI
     appState.receipts.push(receiptData);
     appState.currentReceiptNumber++;
     saveData();
     updateDashboard();
     populateReceiptsHistory();
 
-    // 4) Now confirm success and reset the form
-    alert('Receipt generated successfully! 🎉');
+    // D) Success UI
+    alert(syncOk ? 'Receipt generated and synced! 🎉' : 'Receipt generated locally! Sync pending.'); 
+
+    // E) Reset form & defaults
     const form = document.getElementById('receiptForm');
     if (form) form.reset();
     const body = document.getElementById('feeTableBody');
@@ -892,12 +909,23 @@ async function handleReceiptSubmission(e) {
     const dateEl = document.getElementById('receiptDate');
     if (dateEl) dateEl.value = today;
 
-    // 5) Generate PDF after successful validation
+    // F) Create PDF after a valid submission
     generatePDF();
   } finally {
+    setLoading(false);
     submitting = false;
   }
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('receiptForm');
+  if (form) {
+    // Clear any accidental duplicate listeners by cloning
+    const clone = form.cloneNode(true);
+    form.replaceWith(clone);
+    clone.addEventListener('submit', handleReceiptSubmission, { once: false });
+  }
+});
 function handleAddStudent(e) {
     e.preventDefault();
     
