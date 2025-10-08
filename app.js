@@ -736,10 +736,6 @@ function collectReceiptData() {
     const studentClass = document.getElementById('studentClass').value;
     const rollNumber = document.getElementById('rollNumber').value;
     
-    if (!studentName || !studentClass || !rollNumber) {
-        alert('Please fill  hhsh in all required student information');
-        return null;
-    }
     
     const feeRows = document.querySelectorAll('#feeTableBody tr');
     const feeItems = [];
