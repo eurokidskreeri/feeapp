@@ -502,7 +502,13 @@
             </div>
         </div>
     </div>
-
+    <!-- Full‑page loading overlay (hidden by default) -->
+<div id="loadingOverlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.35); z-index:9999; align-items:center; justify-content:center;">
+  <div style="width:64px;height:64px;border:6px solid #eee;border-top-color:#1E40AF;border-radius:50%;animation:spin 1s linear infinite"></div>
+</div>
+<style>
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="app.js"></script>
 </body>
