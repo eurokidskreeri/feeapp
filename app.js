@@ -37,13 +37,7 @@ let appState = {
 
 // Sample data with Indian names and EuroKids context
 const sampleStudents = [
-    {id: 1, name: "Aarav Sharma", class: "Nursery", rollNo: "EK001", fatherName: "Rajesh Sharma", phone: "9419123456"},
-    {id: 2, name: "Zara Khan", class: "Play Group", rollNo: "EK002", fatherName: "Mohammad Khan", phone: "9469234567"},
-    {id: 3, name: "Arjun Singh", class: "Nursery", rollNo: "EK003", fatherName: "Vikram Singh", phone: "9796345678"},
-    {id: 4, name: "Aisha Begum", class: "Play Group", rollNo: "EK004", fatherName: "Abdul Rashid", phone: "9622456789"},
-    {id: 5, name: "Ishaan Gupta", class: "LKG", rollNo: "EK005", fatherName: "Sunil Gupta", phone: "9419567890"},
-    {id: 6, name: "Fatima Sheikh", class: "UKG", rollNo: "EK006", fatherName: "Ahmed Sheikh", phone: "9796678901"}
-  const sampleStudents = [
+   
   { id: 1,  name: "Arwa Bint Mohammad",        class: "Euro Junior", rollNo: "EK/3589/0002/2526", fatherName: "Mir Mohammad",            phone: "7780808702" },
   { id: 5,  name: "Alina Lone",                 class: "Nursery",     rollNo: "EK/3589/0008/2526", fatherName: "Parvaz Lone",             phone: "9797242526" },
   { id: 6,  name: "Ammar Ibn Hamid",            class: "Nursery",     rollNo: "EK/3589/0007/2526", fatherName: "Abdul Hamid Ahangar",     phone: "9906587845" },
