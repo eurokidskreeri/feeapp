@@ -318,7 +318,7 @@ function generatePDF() {
     
     // Header with EuroKids branding
     doc.setFontSize(18);
-    doc.setFont(undefined, 'bold');
+    doc.setFont('helvetica', 'bold');
     doc.text('EuroKids Kreeri', 105, 20, { align: 'center' });
     
     doc.setFontSize(10);
