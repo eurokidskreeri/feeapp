@@ -402,7 +402,7 @@ function generatePDF() {
     // Footer
     yPos += 20;
     doc.setFontSize(8);
-    doc.text('Thank you for choosing EuroKids!', 105, yPos, { align: 'center' });
+    doc.text('Thank you for choosing--++ EuroKids!', 105, yPos, { align: 'center' });
     doc.text('This is a computer generated receipt. For queries: eurokidskreeri@gmail.com', 105, yPos + 4, { align: 'center' });
     
     // Save PDF
