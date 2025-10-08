@@ -43,6 +43,35 @@ const sampleStudents = [
     {id: 4, name: "Aisha Begum", class: "Play Group", rollNo: "EK004", fatherName: "Abdul Rashid", phone: "9622456789"},
     {id: 5, name: "Ishaan Gupta", class: "LKG", rollNo: "EK005", fatherName: "Sunil Gupta", phone: "9419567890"},
     {id: 6, name: "Fatima Sheikh", class: "UKG", rollNo: "EK006", fatherName: "Ahmed Sheikh", phone: "9796678901"}
+  const sampleStudents = [
+  { id: 1,  name: "Arwa Bint Mohammad",        class: "Euro Junior", rollNo: "EK/3589/0002/2526", fatherName: "Mir Mohammad",            phone: "7780808702" },
+  { id: 5,  name: "Alina Lone",                 class: "Nursery",     rollNo: "EK/3589/0008/2526", fatherName: "Parvaz Lone",             phone: "9797242526" },
+  { id: 6,  name: "Ammar Ibn Hamid",            class: "Nursery",     rollNo: "EK/3589/0007/2526", fatherName: "Abdul Hamid Ahangar",     phone: "9906587845" },
+  { id: 7,  name: "Bareerah Bilal",             class: "Nursery",     rollNo: "EK/3589/0004/2526", fatherName: "Bilal Ahmad Wani",        phone: "8825076250" },
+  { id: 8,  name: "Faizan Hilal",               class: "Nursery",     rollNo: "EK/3589/0026/2526", fatherName: "Hilal Ahmad",             phone: "6005151072" },
+  { id: 9,  name: "Medhi Ibn Mohammad",         class: "Nursery",     rollNo: "EK/3589/0009/2526", fatherName: "",                        phone: "" },
+  { id: 10, name: "Mohammad Abdullah Lone",     class: "Nursery",     rollNo: "EK/3589/0031/2526", fatherName: "Bilal Ahmad Lone",        phone: "9622422860" },
+  { id: 11, name: "Mohammad Arsalan Mir",       class: "Nursery",     rollNo: "EK/3589/0021/2526", fatherName: "Javeed Ahmad Mir",        phone: "8825058265" },
+  { id: 12, name: "Mohammad Soliha Lone",       class: "Nursery",     rollNo: "EK/3589/0019/2526", fatherName: "Imtayaz Ahmad Lone",      phone: "9797141267" },
+  { id: 13, name: "Muhammad Bin Sajad",         class: "Nursery",     rollNo: "EK/3589/0001/2526", fatherName: "Sajad Nazir",             phone: "7045599019" },
+  { id: 14, name: "Muhammad Nouman Sheikh",     class: "Nursery",     rollNo: "EK/3589/0006/2526", fatherName: "Aijaz Ahmad Shiekh",      phone: "7006103893" },
+  { id: 15, name: "Syed Daaim",                 class: "Nursery",     rollNo: "EK/3589/0003/2526", fatherName: "Dr Zoofishan Syed",       phone: "8825003308" },
+  { id: 16, name: "Syed Hyder Bukhari",         class: "Nursery",     rollNo: "EK/3589/0005/2526", fatherName: "",                        phone: "8899539265" },
+  { id: 17, name: "Zeenat Binti Yasir",         class: "Nursery",     rollNo: "EK/3589/0020/2526", fatherName: "Yasir Arfat Bhat",        phone: "9596000590" },
+  { id: 18, name: "Syed Faryal Musadiq",        class: "Nursery MTA", rollNo: "EK/3589/0029/2526", fatherName: "Syed Musadiq",           phone: "6006213107" },
+  { id: 19, name: "Syed Zimaal Irfan",          class: "Nursery MTA", rollNo: "EK/3589/0028/2526", fatherName: "Syed Irfan",             phone: "6006288767" },
+  { id: 20, name: "Affan",                      class: "Play Group",  rollNo: "EK/3589/0011/2526", fatherName: "Jdf",                     phone: "7658746574" },
+  { id: 21, name: "Ardwan",                     class: "Play Group",  rollNo: "EK/3589/0012/2526", fatherName: "Khan",                    phone: "8765858654" },
+  { id: 22, name: "Arham Hilal",                class: "Play Group",  rollNo: "EK/3589/0023/2526", fatherName: "Hilal Ahmad Akhoon",      phone: "7006407807" },
+  { id: 23, name: "Asfand",                     class: "Play Group",  rollNo: "EK/3589/0013/2526", fatherName: "Muhammad",                phone: "8658786575" },
+  { id: 24, name: "Danish",                     class: "Play Group",  rollNo: "EK/3589/0015/2526", fatherName: "Dawood",                  phone: "9876987596" },
+  { id: 25, name: "Fardeen",                    class: "Play Group",  rollNo: "EK/3589/0010/2526", fatherName: "Syed Rida Bukhari",       phone: "8899539266" },
+  { id: 26, name: "Mir Areeba",                 class: "Play Group",  rollNo: "EK/3589/0017/2526", fatherName: "Reyaz Ahmad Mir",         phone: "9622417887" },
+  { id: 27, name: "Mohammad Aasim Mir",         class: "Play Group",  rollNo: "EK/3589/0024/2526", fatherName: "Hilal Ahmad Mir",         phone: "7006797139" },
+  { id: 28, name: "Mohammad Usman Ganai",       class: "Play Group",  rollNo: "EK/3589/0033/2526", fatherName: "Imtayaz Ahmad Ganai",     phone: "8825026592" },
+  { id: 29, name: "Niamat Jan",                 class: "Play Group",  rollNo: "EK/3589/0030/2526", fatherName: "Farooq Ahmad Lone",       phone: "9797002764" },
+  { id: 30, name: "Noorain Miran",              class: "Play Group",  rollNo: "EK/3589/0025/2526", fatherName: "Ummar Ali Khan",          phone: "7006221540" },
+  { id: 31, name: "Taimur Aijaz Ali",           class: "Play Group",  rollNo: "EK/3589/0032/2526", fatherName: "Aijaz Ahmad
 ];
 
 const sampleReceipts = [
