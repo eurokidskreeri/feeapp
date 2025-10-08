@@ -63,59 +63,7 @@ const sampleStudents = [
   { id: 31, name: "Taimur Aijaz Ali",           class: "Play Group",  rollNo: "EK/3589/0032/2526", fatherName: "Aijaz Ahmad", phone :"9898989870"}
 ];
 
-const sampleReceipts = [
-    {
-        id: "EK-KRI-2025-001", 
-        studentName: "Aarav Sharma", 
-        class: "Nursery", 
-        rollNo: "EK001",
-        fatherName: "Rajesh Sharma",
-        amount: 2700, 
-        date: "2025-01-10", 
-        paymentMethod: "UPI", 
-        academicSession: "2025-26",
-        feeItems: [
-            {type: "Monthly Fee - Nursery", amount: 1900}, 
-            {type: "Transport Fee", amount: 800}
-        ],
-        discount: 0,
-        total: 2700
-    },
-    {
-        id: "EK-KRI-2025-002", 
-        studentName: "Zara Khan", 
-        class: "Play Group", 
-        rollNo: "EK002",
-        fatherName: "Mohammad Khan",
-        amount: 2200, 
-        date: "2025-01-08", 
-        paymentMethod: "Cash", 
-        academicSession: "2025-26",
-        feeItems: [
-            {type: "Monthly Fee - Play Group", amount: 1600}, 
-            {type: "Books & Stationery", amount: 600}
-        ],
-        discount: 0,
-        total: 2200
-    },
-    {
-        id: "EK-KRI-2025-003", 
-        studentName: "Arjun Singh", 
-        class: "Nursery", 
-        rollNo: "EK003",
-        fatherName: "Vikram Singh",
-        amount: 2200, 
-        date: "2025-01-05", 
-        paymentMethod: "Net Banking", 
-        academicSession: "2025-26",
-        feeItems: [
-            {type: "Monthly Fee - Nursery", amount: 1900}, 
-            {type: "Activities Fee", amount: 300}
-        ],
-        discount: 0,
-        total: 2200
-    }
-];
+ 
 
 // Google Sheets Web App endpoint (Apps Script /exec URL)
 const EXEC_URL =  "https://script.google.com/macros/s/AKfycbxKm4POgX_diaiPsoPNZXTkqMRssSV00ejuJtwJJTa9L6IRugHaiLWSSIB8jMPpUiN1/exec";
