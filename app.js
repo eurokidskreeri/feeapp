@@ -315,7 +315,8 @@ function generatePDF() {
 
   // Place logo at top-left (15mm from left, 12mm from top, 26mm wide, 26mm tall)
   doc.addImage(EUROKIDS_LOGO, "JPEG", 12, 12, 46, 46);
-    
+  doc.addImage(EUROKIDS_LOGO, "JPEG", 140, 12, 46, 46);
+
     // Set font
     doc.setFont('helvetica');
     
