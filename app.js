@@ -1,4 +1,39 @@
 // EuroKids Application State
+
+// Build Apr–Mar from session like "Apr 25 - Mar 26"
+function buildSessionMonths(sessionStr) {
+  // Fallback to current Apr–Mar if missing
+  const start = new Date(); start.setMonth(3); start.setDate(1); // Apr of current year
+  // If sessionStr like "Apr 25 - Mar 26", parse years (optional)
+  const months = [];
+  const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  // Apr..Dec of Y1
+  let y1 = start.getFullYear();
+  for (let m=3; m<12; m++) months.push(`${monthNames[m]} ${y1}`);
+  // Jan..Mar of Y2
+  let y2 = y1+1;
+  for (let m=0; m<3; m++) months.push(`${monthNames[m]} ${y2}`);
+  return months;
+}
+
+function renderMonthChips() {
+  const wrap = document.getElementById('monthsCovered');
+  if (!wrap) return;
+  wrap.innerHTML = '';
+  const months = buildSessionMonths((document.getElementById('academicSession')||{}).value || '');
+  months.forEach(label => {
+    const chip = document.createElement('div');
+    chip.className = 'month-chip';
+    chip.textContent = label;
+    chip.dataset.value = label;
+    chip.onclick = () => { chip.classList.toggle('active'); onMonthsChanged(); };
+    wrap.appendChild(chip);
+  });
+}
+
+function getSelectedMonths() {
+  return Array.from(document.querySelectorAll('.month-chip.active')).map(c => c.dataset.value);
+}
 function setLoading(on) {
   const btn = document.getElementById('generateBtn');         // id on your submit button
   const overlay = document.getElementById('loadingOverlay');
@@ -77,7 +112,9 @@ async function syncReceiptToSheets(receipt) {
         amount: Number(receipt.total || receipt.amount || 0),
         paymentMethod: receipt.paymentMethod,
         balance: Number(receipt.balance || 0),
-        total: Number(receipt.total || receipt.amount || 0)
+        total: Number(receipt.total || receipt.amount || 0),
+        monthsCovered: (receipt.monthsCovered || []).join(', '),
+        monthsCount: receipt.monthsCount || 0
     };
 
     // Use text/plain so the browser sends a "simple request" (no OPTIONS preflight)
@@ -355,7 +392,14 @@ function generatePDF() {
     yPos += 6;
     doc.text(`Payment Method: ${receiptData.paymentMethod}`, 20, yPos);
     yPos += 10;
-    
+
+    // in generatePDFFrom(receipt) after student info lines
+    const monthsLine = receipt.monthsCovered?.length
+    ? `Months Covered: ${receipt.monthsCovered.join(', ')}`
+    : 'Months Covered: —';
+    const wrapped = doc.splitTextToSize(monthsLine, 170); // wrap to width
+    doc.text(wrapped, 20, y);                              // jsPDF handles array lines
+    y += (wrapped.length * 6) + 6;
     // Fee table
     doc.setFont(undefined, 'bold');
     doc.text('Fee Particulars', 20, yPos);
@@ -738,21 +782,20 @@ function collectReceiptData() {
     const discount = parseFloat(document.getElementById('discount').value) || 0;
     const total = Math.max(0, subtotal - discount);
     
-    return {
-        id: document.getElementById('receiptNumber').value,
-        studentName: studentName,
-        class: studentClass,
-        rollNo: rollNumber,
-        fatherName: document.getElementById('fatherName').value,
-        phone: document.getElementById('phone').value,
-        date: document.getElementById('receiptDate').value,
-        academicSession: document.getElementById('academicSession').value,
-        paymentMethod: document.getElementById('paymentMethod').value,
-        feeItems: feeItems,
-        subtotal: subtotal,
-        discount: discount,
-        total: total
-    };
+ // inside collectReceiptData(), after building feeItems, subtotal, etc.
+const monthsCovered = getSelectedMonths();
+const receipt = {
+  id: receiptNumberEl.value,
+  studentName, class: studentClass, rollNo: rollNumber,
+  fatherName, phone,
+  date: receiptDateEl.value,
+  academicSession: (document.getElementById('academicSession')||{}).value || '',
+  paymentMethod: (document.getElementById('paymentMethod')||{}).value || '',
+  monthsCovered,
+  monthsCount: monthsCovered.length,
+  feeItems, subtotal, discount, total
+};
+return receipt;
 }
 
 function generateReceiptHTML(data) {
@@ -1246,7 +1289,37 @@ function setupEventListeners() {
     }
 }
 
+function onMonthsChanged() {
+  const monthsCount = getSelectedMonths().length || 1;
+  document.querySelectorAll('#feeTableBody tr').forEach(row => {
+    const type = (row.querySelector('.fee-type-select')||{}).value || '';
+    const amtEl = row.querySelector('.fee-amount-input');
+    if (!amtEl) return;
+    // Rows whose type starts with "Monthly Fee" are per-month
+    if (/^Monthly Fee/i.test(type)) {
+      const base = getBaseMonthlyAmount(type); // 1900 nursery, 1600 playgroup, etc.
+      amtEl.value = String(base * monthsCount);
+    }
+  });
+  calculateTotal();
+}
+
+function getBaseMonthlyAmount(type) {
+  if (/Nursery/i.test(type)) return 1900;
+  if (/Play Group/i.test(type)) return 1600;
+  return parseFloat((type.match(/d+/)||[0])[0]) || 0;
+}
+
+document.getElementById('monthsCovered')?.addEventListener('click', (e)=>{ /* chips handle themselves */ });
+
+document.addEventListener('DOMContentLoaded', renderMonthChips);
+const sessionEl = document.getElementById('academicSession');
+if (sessionEl) sessionEl.addEventListener('change', renderMonthChips);
+
 // Initialize app when DOM is loaded
+document.addEventListener('DOMContentLoaded', renderMonthChips);
+const sessionEl = document.getElementById('academicSession');
+if (sessionEl) sessionEl.addEventListener('change', renderMonthChips);
 document.addEventListener('DOMContentLoaded', function() {
     console.log('EuroKids Fee Receipt App - Initializing...');
     loadData();
