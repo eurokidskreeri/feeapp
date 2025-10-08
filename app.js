@@ -1312,9 +1312,7 @@ function getBaseMonthlyAmount(type) {
 
 document.getElementById('monthsCovered')?.addEventListener('click', (e)=>{ /* chips handle themselves */ });
 
-document.addEventListener('DOMContentLoaded', renderMonthChips);
-const sessionEl = document.getElementById('academicSession');
-if (sessionEl) sessionEl.addEventListener('change', renderMonthChips);
+ 
 
 // Initialize app when DOM is loaded
 document.addEventListener('DOMContentLoaded', renderMonthChips);
