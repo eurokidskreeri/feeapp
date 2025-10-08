@@ -52,8 +52,8 @@ const sampleStudents = [
   { id: 15, name: "Syed Daaim",                 class: "Nursery",     rollNo: "EK/3589/0003/2526", fatherName: "Dr Zoofishan Syed",       phone: "8825003308" },
   { id: 16, name: "Syed Hyder Bukhari",         class: "Nursery",     rollNo: "EK/3589/0005/2526", fatherName: "",                        phone: "8899539265" },
   { id: 17, name: "Zeenat Binti Yasir",         class: "Nursery",     rollNo: "EK/3589/0020/2526", fatherName: "Yasir Arfat Bhat",        phone: "9596000590" },
-  { id: 18, name: "Syed Faryal Musadiq",        class: "Nursery MTA", rollNo: "EK/3589/0029/2526", fatherName: "Syed Musadiq",           phone: "6006213107" },
-  { id: 19, name: "Syed Zimaal Irfan",          class: "Nursery MTA", rollNo: "EK/3589/0028/2526", fatherName: "Syed Irfan",             phone: "6006288767" },
+  { id: 18, name: "Syed Faryal Musadiq",        class: "Nursery", rollNo: "EK/3589/0029/2526", fatherName: "Syed Musadiq",           phone: "6006213107" },
+  { id: 19, name: "Syed Zimaal Irfan",          class: "Nursery", rollNo: "EK/3589/0028/2526", fatherName: "Syed Irfan",             phone: "6006288767" },
   { id: 22, name: "Arham Hilal",                class: "Play Group",  rollNo: "EK/3589/0023/2526", fatherName: "Hilal Ahmad Akhoon",      phone: "7006407807" },
   { id: 26, name: "Mir Areeba",                 class: "Play Group",  rollNo: "EK/3589/0017/2526", fatherName: "Reyaz Ahmad Mir",         phone: "9622417887" },
   { id: 27, name: "Mohammad Aasim Mir",         class: "Play Group",  rollNo: "EK/3589/0024/2526", fatherName: "Hilal Ahmad Mir",         phone: "7006797139" },
@@ -315,7 +315,7 @@ function generatePDF() {
 
   // Place logo at top-left (15mm from left, 12mm from top, 26mm wide, 26mm tall)
   doc.addImage(EUROKIDS_LOGO, "JPEG", 12, 12, 46, 46);
-  doc.addImage(EUROKIDS_st, "JPEG", 140, 200, 46, 46);
+  doc.addImage(EUROKIDS_st, "JPEG", 140, 180, 46, 46);
 
     // Set font
     doc.setFont('helvetica');
