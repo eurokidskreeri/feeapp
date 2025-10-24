@@ -329,10 +329,10 @@ function hidePreviewModal() {
     }
 }
 
-function generatePDF() {
+function generatePDF(receipt) {
+    if (!receipt) { alert("No receipt data."); return; }
     const receiptData = collectReceiptData();
-    if (!receiptData) return;
-    
+    if (!receiptData) return;    
     if (!window.jspdf) { alert('PDF generation library not loaded.'); return; }
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
@@ -927,7 +927,9 @@ async function handleReceiptSubmission(e) {
     if (dateEl) dateEl.value = today;
 
     // F) Create PDF after a valid submission
-    generatePDF();
+    const receiptData = collectReceiptData();
+    if (!receiptData) return;
+    generatePDF(receiptData);     
   } finally {
     setLoading(false);
     submitting = false;
