@@ -927,7 +927,7 @@ async function handleReceiptSubmission(e) {
     if (dateEl) dateEl.value = today;
 
     // F) Create PDF after a valid submission
-    const receiptData = collectReceiptData();
+    
     if (!receiptData) return;
     generatePDF(receiptData);     
   } finally {
