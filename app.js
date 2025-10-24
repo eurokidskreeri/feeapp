@@ -397,6 +397,7 @@ function generatePDF(receipt) {
     ? `Months Covered: ${receipt.monthsCovered.join(', ')}`
     : 'Months Covered: —';
     const wrapped = doc.splitTextToSize(monthsLine, 170); // wrap to width
+    let y = 65;
     doc.text(wrapped, 20, y);                              // jsPDF handles array lines
     y += (wrapped.length * 6) + 6;
     // Fee table
