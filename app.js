@@ -6,7 +6,7 @@ function buildSessionMonths(sessionStr) {
   const start = new Date(); start.setMonth(3); start.setDate(1); // Apr of current year
   // If sessionStr like "Apr 25 - Mar 26", parse years (optional)
   const months = [];
-  const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]; 
   // Apr..Dec of Y1
   let y1 = start.getFullYear();
   for (let m=3; m<12; m++) months.push(`${monthNames[m]} ${y1}`);
@@ -792,8 +792,8 @@ return {
   fatherName: document.getElementById('fatherName').value,
   phone: document.getElementById('phone').value,
   date:document.getElementById('receiptDate').value,
-  academicSession: document.getElementById('academicSession'),
-  paymentMethod: document.getElementById('paymentMethod'),
+  academicSession: document.getElementById('academicSession').value,
+  paymentMethod: document.getElementById('paymentMethod').value,
   month : monthsCovered,
   monthsCount: monthsCovered.length,
   feeItems :feeItems,
